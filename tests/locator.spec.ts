@@ -45,10 +45,37 @@ test("visible locator", async ({page})=>{
 
 })
 
-test.only( ' child locator', async ({page}) =>{
+test( ' child locator', async ({page}) =>{
     await page.locator('nb-card nb-radio :text-is("Option 1")').click()
     await page.locator('nb-card').locator('nb-radio').locator(':text-is("Option 2")').click()
 
 
     await page.locator('nb-card').nth(3).getByRole('button').click()
+})
+
+
+test.only('locating parent element', async( {page})=>{
+    //hasText
+    await page.locator('nb-card', {hasText:"Using the Grid"})
+    .getByRole('textbox', {name:"Email"}).click()
+    // has - locator
+    await page.locator('nb-card', {has: page.locator('#inputEmail1')})
+    .getByRole('textbox', {name:"Email"}).click()
+    //  filter
+    await page.locator('nb-card')
+    .filter({hasText:"Basic form"})
+    .getByRole('textbox', {name:"Email"})
+    .click()
+
+    //fiter two times
+    await page.locator('nb-card')
+    .filter({has: page.locator('nb-checkbox')})
+    .filter({hasText: 'Sign in'})
+    .click()
+
+    // .. - one level up, not very good
+    await page.locator(':text-is("Using the Grid")')
+    .locator('..')
+    .getByRole('textbox', {name:"Email"})
+    .click()
 })
