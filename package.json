@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "npx playwright test ",
+    "slow": "npx playwright test --config=pw-slow.config.ts"
+
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
