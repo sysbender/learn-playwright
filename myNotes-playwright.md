@@ -5,7 +5,7 @@
 * jest assertion, web first assertion
 
 
-### setup
+## setup
 
 ```shell
 # scaffold
@@ -21,6 +21,11 @@ npx playwright config
 
 ```
 
+### dotenv
+
+```shell
+npm install dotenv --save
+```
 ## run test
 ### from cli
 ```sh
