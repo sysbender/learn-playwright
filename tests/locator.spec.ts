@@ -97,7 +97,7 @@ test('reuse locator', async ({page}) =>{
 })
 
 
-test.only('extract text', async ({page})=>{
+test('extract text', async ({page})=>{
 
     // textContent
     const basicForm = page.locator('nb-card').filter({hasText: "Basic form"})
@@ -118,3 +118,21 @@ test.only('extract text', async ({page})=>{
     const placeHolder = await emailElement.getAttribute('placeholder')
     expect(placeHolder).toEqual('Email')
 })
+
+
+test.only('assertion', async({page})=>{
+    const basicForm = page.locator('nb-card').filter({hasText: "Basic form"})
+    const button = basicForm.locator('button')
+    const   buttonText = await button.textContent()
+    
+// general assertion
+
+expect(buttonText).toEqual('Submit')
+
+// soft assertion
+expect.soft(buttonText).toEqual('Submit123')
+//  locator assertion
+await expect(button).toHaveText('Submit')
+
+})
+
