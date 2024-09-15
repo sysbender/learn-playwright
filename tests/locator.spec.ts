@@ -136,3 +136,9 @@ await expect(button).toHaveText('Submit')
 
 })
 
+// auto waiting
+//uitestingplayground.com/ajax
+
+
+
+
