@@ -1,4 +1,5 @@
-import {test }from "@playwright/test";
+import {test , expect}from "@playwright/test";
+import exp from "constants";
 
 
 test.beforeEach( async ({page})=>{
@@ -54,7 +55,7 @@ test( ' child locator', async ({page}) =>{
 })
 
 
-test.only('locating parent element', async( {page})=>{
+test('locating parent element', async( {page})=>{
     //hasText
     await page.locator('nb-card', {hasText:"Using the Grid"})
     .getByRole('textbox', {name:"Email"}).click()
@@ -78,4 +79,42 @@ test.only('locating parent element', async( {page})=>{
     .locator('..')
     .getByRole('textbox', {name:"Email"})
     .click()
+})
+
+test('reuse locator', async ({page}) =>{
+    const basicForm = page.locator('nb-card').filter({hasText: "Basic form"})
+    const emailField = basicForm.getByRole('textbox', {name: "Email"})
+
+    await emailField.fill('test@test.com')
+    await basicForm.getByRole('textbox', {name:'Password'}).fill('pass123')
+    await basicForm.locator('nb-checkbox').click()
+
+    await basicForm.getByRole('button').click()
+
+    await expect(emailField).toHaveValue('test@test.com')
+
+
+})
+
+
+test.only('extract text', async ({page})=>{
+
+    // textContent
+    const basicForm = page.locator('nb-card').filter({hasText: "Basic form"})
+
+    const   buttonText = await basicForm.locator('button').textContent()
+    expect(buttonText).toEqual('Submit')
+    // allTextContents
+    const radioLabels = await page.locator('nb-card')
+    .filter({hasText: 'Using the grid'}).locator('nb-radio').allTextContents()
+    expect(radioLabels).toContain('Option 1')
+
+    // inputValue
+    const emailElement = basicForm.getByRole('textbox', {name: 'Email'})
+    await emailElement.fill('test@test.com')
+    const email = await emailElement.inputValue()
+    expect(email).toEqual('test@test.com')
+    // get attribute
+    const placeHolder = await emailElement.getAttribute('placeholder')
+    expect(placeHolder).toEqual('Email')
 })
